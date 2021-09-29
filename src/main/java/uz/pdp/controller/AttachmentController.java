@@ -2,6 +2,7 @@ package uz.pdp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +18,7 @@ public class AttachmentController {
     public AttachmentController(AttachmentService attachmentService) {
         this.attachmentService = attachmentService;
     }
+    @PreAuthorize(value = "hasAuthority('UPLOAD_FILE')")
     @PostMapping("/upload")
     public ResponseEntity<ApiResponse<String>> upload(MultipartHttpServletRequest request) {
         return attachmentService.uploadFile(request);

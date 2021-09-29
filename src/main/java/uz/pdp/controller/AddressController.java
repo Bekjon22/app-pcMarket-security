@@ -3,6 +3,7 @@ package uz.pdp.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -28,26 +29,31 @@ public class AddressController {
     }
 
 
-
+    @PreAuthorize(value = "hasAuthority('ADD_ADDRESS')")
     @PostMapping("/save")
     public ResponseEntity<ApiResponse<Address>> save(@Valid @RequestBody AddressDto dto){
         return addressService.save(dto);
     }
 
+    @PreAuthorize(value = "hasAuthority('GET_ONE_ADDRESS')")
     @GetMapping("/get/{id}")
     public ResponseEntity<ApiResponse<Address>> get(@PathVariable(value = "id") Long id) {
         return addressService.get(id);
     }
+
+    @PreAuthorize(value = "hasAuthority('GET_ALL_ADDRESS')")
     @GetMapping("/get/all")
     public ResponseEntity<ApiResponse<List<Address>>> getList(@RequestParam(required = false,defaultValue = "0") int page) {
         return addressService.getList(page);
     }
 
+    @PreAuthorize(value = "hasAuthority('UPDATE_ADDRESS')")
     @PutMapping("/update/{id}")
     public ResponseEntity<ApiResponse<Address>> update(@Valid @PathVariable(value = "id") Long id, @RequestBody AddressDto dto) {
         return addressService.update(id, dto);
     }
 
+    @PreAuthorize(value = "hasAuthority('DELETE_ADDRESS')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<ApiResponse<Boolean>> delete(@PathVariable(value = "id") Long id) {
         return addressService.delete(id);
